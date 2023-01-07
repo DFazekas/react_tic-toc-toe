@@ -24,7 +24,7 @@ export default function findWinner(tiles: string[]): Winner {
       if (
         tiles[g[0]] === tiles[g[1]] &&
         tiles[g[1]] === tiles[g[2]] &&
-        tiles[g[0]] != ''
+        tiles[g[0]] !== ''
       ) {
         winnerGroup = groups[index]
         winner = tiles[g[0]] as winnerType
