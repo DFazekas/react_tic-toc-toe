@@ -4,4 +4,6 @@ Welcome to our Tic-Tac-Toe game! In this game, you and your opponent take turns 
 
 In addition to the standard gameplay, we've added an undo button that allows you to undo your last move. This can be helpful if you make a mistake or change your mind about your strategy. Simply click the undo button to revert to the previous turn.
 
+![ezgif com-gif-maker](https://user-images.githubusercontent.com/22490250/211173730-89d62089-a786-4db9-b3a9-f28250444193.gif)
+
 We hope you enjoy playing Tic-Tac-Toe!
