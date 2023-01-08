@@ -20,7 +20,7 @@ function App() {
   )
 
   useEffect(() => {
-    setTurn(turn == Player.X ? Player.O : Player.X)
+    setTurn(turn === Player.X ? Player.O : Player.X)
     const { player, group } = findWinner(tiles)
     setWinner(player)
     handleShowingWinner(group)
@@ -58,7 +58,7 @@ function App() {
   const DisplayWinner = () => {
     return (
       <h1>
-        {winner == 'tie' ? 'Tie game!' : `Winner is ${winner!.toUpperCase()}!`}
+        {winner === 'tie' ? 'Tie game!' : `Winner is ${winner!.toUpperCase()}!`}
       </h1>
     )
   }
