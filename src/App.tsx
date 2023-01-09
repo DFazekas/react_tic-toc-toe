@@ -2,17 +2,33 @@ import { useEffect, useState } from 'react'
 import { Board, UndoButton } from './App.styled'
 import Button from './components/Button/Button'
 import findWinner from './utils/findWinner'
+import findRandomMove from './utils/npc'
+import undoHistory from './utils/undoHistory'
 
 const initialTiles: string[] = Array(9).fill('')
-const enum Player {
-  'X' = 'x',
-  'O' = 'o'
-}
-const startingPlayer = Player.X
+let players: player[]
 
-function App() {
-  const [tiles, setTiles] = useState(initialTiles)
-  const [turn, setTurn] = useState<Player>(startingPlayer)
+function initializePlayers(numPlayers: number): player[] {
+  if (numPlayers === 1)
+    return [
+      { player: 'human', piece: 'x' },
+      { player: 'npc', piece: 'o' }
+    ]
+
+  return [
+    { player: 'human', piece: 'x' },
+    { player: 'human', piece: 'o' }
+  ]
+}
+
+function App({ numPlayers = 1 }: { numPlayers: number }) {
+  useEffect(() => {
+    // Initialize players.
+    players = initializePlayers(numPlayers)
+  }, [])
+
+  const [tiles, setTiles] = useState<string[]>(initialTiles)
+  const [turn, setTurn] = useState<player>(initializePlayers(numPlayers)[0])
   const [history, setHistory] = useState([initialTiles])
   const [winner, setWinner] = useState<winnerType>(null)
   const [winningGroup, setWinningGroup] = useState<boolean[]>(
@@ -20,12 +36,21 @@ function App() {
   )
 
   useEffect(() => {
-    setTurn(turn === Player.X ? Player.O : Player.X)
-    const { player, group } = findWinner(tiles)
-    setWinner(player)
-    handleShowingWinner(group)
+    const currentTurn = getCurrentTurn(tiles, players)
+    setTurn(currentTurn)
+    const currentWinner = updateWinner(tiles)
+
+    if (currentTurn.player === 'npc' && currentWinner === null) {
+      const move = findRandomMove(tiles)
+      if (move === -1) throw new Error('No move found for NPC!')
+      handleTileSelection(move, currentTurn.piece)
+    }
   }, [tiles])
 
+  /**
+   * Handles highlighting the winning group.
+   * @param group The winning group.
+   */
   const handleShowingWinner = (group: number[] | null): void => {
     let winners = new Array(tiles.length).fill(false)
     if (!group) {
@@ -36,26 +61,70 @@ function App() {
     setWinningGroup(winners)
   }
 
-  const handleClick = (index: number): void => {
-    if (tiles[index] === '' && winner === null) {
-      const newTiles = tiles.slice()
-      newTiles[index] = turn
-      setTiles(newTiles)
-      setHistory([...history, newTiles])
+  /**
+   * Returns the current turn. If the number of pieces for each player is equal, then it returns the first player.
+   * @param tiles The current tiles.
+   * @param players The players.
+   * @returns The current turn.
+   */
+  function getCurrentTurn(tiles: string[], players: player[]): player {
+    //TODO: unit test.
+    const countPieces = (piece: pieceType): number =>
+      tiles.reduce((acc, cur) => (cur === piece ? acc + 1 : acc), 0)
+    const num0Pieces = countPieces(players[0].piece)
+    const num1Pieces = countPieces(players[1].piece)
+    return num0Pieces <= num1Pieces ? players[0] : players[1]
+  }
+
+  /**
+   * Finds the winner, and updates the winner state. Also updates the winning group.
+   * @param tiles The current tiles.
+   * @returns The winner.
+   */
+  function updateWinner(tiles: string[]): winnerType {
+    const { player, group } = findWinner(tiles)
+    setWinner(player)
+    handleShowingWinner(group)
+    return player
+  }
+
+  /**
+   * Updates the tiles array with the new move, and updates the history.
+   * @param index The index of the tile that was clicked.
+   */
+  function handleTileSelection(index: number, piece: pieceType): void {
+    const newTiles = [...tiles]
+    newTiles[index] = piece
+    setTiles(newTiles)
+    setHistory([...history, newTiles])
+  }
+
+  /**
+   * Handles the click event on a tile.
+   * If the tile is empty, and there is no winner, then the tile is updated.
+   * @param index The index of the tile that was clicked.
+   */
+  function onTileClick(index: number): void {
+    if (turn.player === 'human' && tiles[index] === '' && winner === null) {
+      handleTileSelection(index, turn.piece)
     }
   }
 
-  const handleUndo = () => {
-    console.log("I'm undoing!")
-    if (history.length > 1) {
-      const currentHist = history.slice()
-      currentHist.pop()
-      setHistory(currentHist)
-      setTiles(currentHist.slice(-1)[0])
-    }
+  /**
+   * Handles the click event on the undo button.
+   */
+  const onUndoClick = () => {
+    const currentHist = undoHistory(
+      numPlayers,
+      history,
+      getCurrentTurn(tiles, players).player
+    )
+    setHistory(currentHist)
+    const currentTiles = currentHist.slice(-1)[0]
+    setTiles(currentTiles)
   }
 
-  const DisplayWinner = () => {
+  const WinnerDisplay = () => {
     return (
       <h1>
         {winner === 'tie' ? 'Tie game!' : `Winner is ${winner!.toUpperCase()}!`}
@@ -66,13 +135,13 @@ function App() {
   return (
     <div className='App'>
       <div>Tic Toc Toe</div>
-      {winner ? <DisplayWinner /> : <h1>{turn.toUpperCase()}'s turn</h1>}
+      {winner ? <WinnerDisplay /> : <h1>{turn.player}'s turn</h1>}
       <Board>
         {tiles.map((tile, index) => (
           <Button
             className={`tile ${winningGroup[index] ? 'won' : ''}`}
             key={`tile-${index}`}
-            handleClick={(): void => handleClick(index)}
+            handleClick={(): void => onTileClick(index)}
           >
             {tile}
           </Button>
@@ -81,7 +150,7 @@ function App() {
       <UndoButton
         id='undo'
         disabled={history.length < 2}
-        onClick={() => handleUndo()}
+        onClick={() => onUndoClick()}
       >
         Undo
       </UndoButton>
