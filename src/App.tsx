@@ -173,6 +173,7 @@ function App({ numPlayers = 1 }: { numPlayers: number }) {
         <Row>
           <BootstrapButton
             id='undo'
+            size='lg'
             variant={
               winner !== null
                 ? 'danger'
