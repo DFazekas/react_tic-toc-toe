@@ -5,7 +5,7 @@ const Button = ({
   children,
   handleClick
 }: {
-  className: string
+  className?: string
   children: string
   handleClick: (event: React.MouseEvent<HTMLButtonElement>) => void
 }) => {

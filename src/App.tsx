@@ -5,22 +5,13 @@ import findWinner from './utils/findWinner'
 import findRandomMove from './utils/npc'
 import undoHistory from './utils/undoHistory'
 import { Container, Row, Button as BootstrapButton } from 'react-bootstrap'
+import initializePlayers from './utils/initializePlayers'
+import WinnerDisplay from './components/WinnerDisplay/WinnerDisplay'
+import TurnDisplay from './components/TurnDisplay/TurnDisplay'
+import getCurrentTurn from './utils/getCurrentTurn'
 
 const initialTiles: string[] = Array(9).fill('')
 let players: player[]
-
-function initializePlayers(numPlayers: number): player[] {
-  if (numPlayers === 1)
-    return [
-      { player: 'human', piece: 'x' },
-      { player: 'npc', piece: 'o' }
-    ]
-
-  return [
-    { player: 'human', piece: 'x' },
-    { player: 'human', piece: 'o' }
-  ]
-}
 
 function App({ numPlayers = 1 }: { numPlayers: number }) {
   useEffect(() => {
@@ -57,27 +48,10 @@ function App({ numPlayers = 1 }: { numPlayers: number }) {
    */
   const handleShowingWinner = (group: number[] | null): void => {
     let winners = new Array(tiles.length).fill(false)
-    if (!group) {
-      setWinningGroup(winners)
-      return
+    if (group) {
+      group.forEach((i) => (winners[i] = true))
     }
-    group.map((i) => (winners[i] = true))
     setWinningGroup(winners)
-  }
-
-  /**
-   * Returns the current turn. If the number of pieces for each player is equal, then it returns the first player.
-   * @param tiles The current tiles.
-   * @param players The players.
-   * @returns The current turn.
-   */
-  function getCurrentTurn(tiles: string[], players: player[]): player {
-    //TODO: unit test.
-    const countPieces = (piece: pieceType): number =>
-      tiles.reduce((acc, cur) => (cur === piece ? acc + 1 : acc), 0)
-    const num0Pieces = countPieces(players[0].piece)
-    const num1Pieces = countPieces(players[1].piece)
-    return num0Pieces <= num1Pieces ? players[0] : players[1]
   }
 
   /**
@@ -128,24 +102,6 @@ function App({ numPlayers = 1 }: { numPlayers: number }) {
     setTiles(currentTiles)
   }
 
-  const WinnerDisplay = () => {
-    return (
-      <h1>
-        {winner === 'tie' ? 'Tie game!' : `Winner is ${winner!.toUpperCase()}!`}
-      </h1>
-    )
-  }
-
-  const TurnDisplay = () => {
-    if (numPlayers === 2) {
-      return <h1>{turn.piece.toUpperCase()}'s turn</h1>
-    }
-    if (turn.player === 'npc') {
-      return <h1>NPC's turn</h1>
-    }
-    return <h1>Human's turn</h1>
-  }
-
   return (
     <div className='App'>
       <Container>
@@ -155,7 +111,11 @@ function App({ numPlayers = 1 }: { numPlayers: number }) {
           </BootstrapButton>
         </Row>
         <Row className='mb-2'>
-          {winner ? <WinnerDisplay /> : <TurnDisplay />}
+          {winner ? (
+            <WinnerDisplay winner={winner} />
+          ) : (
+            <TurnDisplay turn={turn} numPlayers={numPlayers} />
+          )}
         </Row>
         <Row>
           <Board>

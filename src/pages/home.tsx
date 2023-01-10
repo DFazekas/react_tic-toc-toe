@@ -17,7 +17,11 @@ const popover = (
       <br />
       <hr />
       Connect with me on{' '}
-      <a href='https://www.linkedin.com/in/devon-fazekas' target='_blank'>
+      <a
+        href='https://www.linkedin.com/in/devon-fazekas'
+        target='_blank'
+        rel='noreferrer'
+      >
         LinkedIn
       </a>
       .
@@ -55,7 +59,9 @@ export default function Home() {
               placement='top'
               overlay={popover}
             >
-              <b>Devon Fazekas</b>
+              <b>
+                <u>Devon Fazekas</u>
+              </b>
             </OverlayTrigger>
           }
         </p>

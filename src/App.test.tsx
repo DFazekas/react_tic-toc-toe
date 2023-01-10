@@ -39,6 +39,8 @@ describe('a game', () => {
     const moves = [0, 1, 3, 4, 8, 7]
     moves.forEach((move) => userEvent.click(tiles[move]))
     expect(screen.queryByText(/Winner is O!/i)).not.toBeNull()
+    const wonGroup = [1, 4, 7]
+    wonGroup.forEach((index) => expect(tiles[index]).toHaveClass('won'))
   })
 
   it('should correctly display player X won', () => {
@@ -47,6 +49,8 @@ describe('a game', () => {
     const moves = [0, 1, 3, 2, 6]
     moves.forEach((move) => userEvent.click(tiles[move]))
     expect(screen.queryByText(/Winner is X!/i)).not.toBeNull()
+    const wonGroup = [0, 3, 6]
+    wonGroup.forEach((index) => expect(tiles[index]).toHaveClass('won'))
   })
 
   it('should correctly display tie game', () => {
@@ -55,6 +59,7 @@ describe('a game', () => {
     const moves = [0, 1, 4, 2, 5, 3, 6, 8, 7]
     moves.forEach((move) => userEvent.click(tiles[move]))
     expect(screen.queryByText(/Tie game!/i)).not.toBeNull()
+    tiles.forEach((tile, index) => expect(tile).not.toHaveClass('won'))
   })
 
   it("shouldn't allow taking another tile after game is won", () => {
