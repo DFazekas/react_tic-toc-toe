@@ -9,14 +9,14 @@ import {
 
 const popover = (
   <Popover id='popover-basic'>
-    <Popover.Header as='h3'>Popover right</Popover.Header>
+    <Popover.Header as='h3'>Hi, I'm Devon</Popover.Header>
     <Popover.Body>
-      Devon is a versatile software engineer entrepreneur passionate about
-      helping others live better lives by creating environments that encourage
-      creativity and innovation.
+      A versatile software engineer entrepreneur passionate about helping others
+      live better lives by creating environments that encourage creativity and
+      innovation.
       <br />
       <hr />
-      Read more on{' '}
+      Connect with me on{' '}
       <a href='https://www.linkedin.com/in/devon-fazekas' target='_blank'>
         LinkedIn
       </a>
