@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
-import { Board, UndoButton } from './App.styled'
+import { Board } from './App.styled'
 import Button from './components/Button/Button'
 import findWinner from './utils/findWinner'
 import findRandomMove from './utils/npc'
 import undoHistory from './utils/undoHistory'
+import { Container, Row, Button as BootstrapButton } from 'react-bootstrap'
 
 const initialTiles: string[] = Array(9).fill('')
 let players: player[]
@@ -25,7 +26,7 @@ function App({ numPlayers = 1 }: { numPlayers: number }) {
   useEffect(() => {
     // Initialize players.
     players = initializePlayers(numPlayers)
-  }, [])
+  }, [numPlayers])
 
   const [tiles, setTiles] = useState<string[]>(initialTiles)
   const [turn, setTurn] = useState<player>(initializePlayers(numPlayers)[0])
@@ -135,28 +136,56 @@ function App({ numPlayers = 1 }: { numPlayers: number }) {
     )
   }
 
+  const TurnDisplay = () => {
+    if (numPlayers === 2) {
+      return <h1>{turn.piece.toUpperCase()}'s turn</h1>
+    }
+    if (turn.player === 'npc') {
+      return <h1>NPC's turn</h1>
+    }
+    return <h1>Human's turn</h1>
+  }
+
   return (
     <div className='App'>
-      <div>Tic Toc Toe</div>
-      {winner ? <WinnerDisplay /> : <h1>{turn.player}'s turn</h1>}
-      <Board>
-        {tiles.map((tile, index) => (
-          <Button
-            className={`tile ${winningGroup[index] ? 'won' : ''}`}
-            key={`tile-${index}`}
-            handleClick={(): void => onTileClick(index)}
+      <Container>
+        <Row xs={1} className='mb-5'>
+          <BootstrapButton variant='light' href='/'>
+            Home
+          </BootstrapButton>
+        </Row>
+        <Row className='mb-2'>
+          {winner ? <WinnerDisplay /> : <TurnDisplay />}
+        </Row>
+        <Row>
+          <Board>
+            {tiles.map((tile, index) => (
+              <Button
+                className={`tile ${winningGroup[index] ? 'won' : ''}`}
+                key={`tile-${index}`}
+                handleClick={(): void => onTileClick(index)}
+              >
+                {tile}
+              </Button>
+            ))}
+          </Board>
+        </Row>
+        <Row>
+          <BootstrapButton
+            variant={
+              winner !== null
+                ? 'danger'
+                : history.length < 2
+                ? 'outline-dark'
+                : 'dark'
+            }
+            disabled={history.length < 2}
+            onClick={() => onUndoClick()}
           >
-            {tile}
-          </Button>
-        ))}
-      </Board>
-      <UndoButton
-        id='undo'
-        disabled={history.length < 2}
-        onClick={() => onUndoClick()}
-      >
-        Undo
-      </UndoButton>
+            Undo
+          </BootstrapButton>
+        </Row>
+      </Container>
     </div>
   )
 }
