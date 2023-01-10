@@ -34,12 +34,12 @@ export default function Home() {
 
       <Row className='mt-3'>
         <Col md={6} sm={12} className='d-grid mb-2'>
-          <Button href='/single-player' variant='outline-primary'>
+          <Button size='lg' href='/single-player' variant='outline-primary'>
             1 player
           </Button>
         </Col>
         <Col md={6} sm={12} className='d-grid mb-2'>
-          <Button href='/multi-player' variant='outline-primary'>
+          <Button size='lg' href='/multi-player' variant='outline-primary'>
             2 players
           </Button>
         </Col>
