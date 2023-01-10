@@ -6,6 +6,7 @@ import App from './App'
 import './index.css'
 import Home from './pages/home'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import { GlobalStyle } from './global-styles'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
@@ -29,6 +30,7 @@ const router = createBrowserRouter([
 ])
 root.render(
   <React.StrictMode>
+    <GlobalStyle />
     <RouterProvider router={router} />
   </React.StrictMode>
 )

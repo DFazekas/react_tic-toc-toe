@@ -1,14 +1,4 @@
 import styled from 'styled-components'
-import { createGlobalStyle } from 'styled-components'
-
-createGlobalStyle`
-  * {
-    margin: 0px;
-  }
-  body {
-    margin: 0
-  }
-`
 
 export const Board = styled.div`
   display: grid;
