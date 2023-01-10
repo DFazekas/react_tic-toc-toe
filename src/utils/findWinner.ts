@@ -30,6 +30,7 @@ export default function findWinner(tiles: string[]): Winner {
         winner = tiles[g[0]] as winnerType
         return true
       }
+      return false
     })
   ) {
     return { player: winner, group: winnerGroup }
