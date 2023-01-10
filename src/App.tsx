@@ -41,9 +41,12 @@ function App({ numPlayers = 1 }: { numPlayers: number }) {
     const currentWinner = updateWinner(tiles)
 
     if (currentTurn.player === 'npc' && currentWinner === null) {
-      const move = findRandomMove(tiles)
-      if (move === -1) throw new Error('No move found for NPC!')
-      handleTileSelection(move, currentTurn.piece)
+      // Delay for 1 second to make it look like the NPC is thinking.
+      setTimeout(() => {
+        const move = findRandomMove(tiles)
+        if (move === -1) throw new Error('No move found for NPC!')
+        handleTileSelection(move, currentTurn.piece)
+      }, 1000)
     }
   }, [tiles])
 
