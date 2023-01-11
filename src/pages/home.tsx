@@ -1,11 +1,5 @@
-import {
-  Button,
-  Container,
-  Row,
-  Col,
-  Popover,
-  OverlayTrigger
-} from 'react-bootstrap'
+import { Container, Row, Col, Popover, OverlayTrigger } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 
 const popover = (
   <Popover id='popover-basic'>
@@ -38,14 +32,18 @@ export default function Home() {
 
       <Row className='mt-3'>
         <Col md={6} sm={12} className='d-grid mb-2'>
-          <Button size='lg' href='/single-player' variant='outline-primary'>
+          <Link className='btn btn-primary btn-lg' to='single-player'>
             1 player
-          </Button>
+          </Link>
         </Col>
         <Col md={6} sm={12} className='d-grid mb-2'>
-          <Button size='lg' href='/multi-player' variant='outline-primary'>
+          <Link
+            className='btn btn-outline btn-outline-primary btn-lg'
+            role='button'
+            to='multi-player'
+          >
             2 players
-          </Button>
+          </Link>
         </Col>
       </Row>
 

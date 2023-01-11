@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { RouterProvider } from 'react-router'
-import { createBrowserRouter } from 'react-router-dom'
+import { Routes, Route, BrowserRouter } from 'react-router-dom'
 import App from './App'
 import './index.css'
 import Home from './pages/home'
@@ -10,27 +9,16 @@ import { GlobalStyle } from './global-styles'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <Home />
-  },
-  {
-    path: '*',
-    element: <Home />
-  },
-  {
-    path: '/single-player',
-    element: <App numPlayers={1} />
-  },
-  {
-    path: '/multi-player',
-    element: <App numPlayers={2} />
-  }
-])
 root.render(
   <React.StrictMode>
     <GlobalStyle />
-    <RouterProvider router={router} />
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='*' element={<Home />} />
+        <Route path='single-player' element={<App numPlayers={1} />} />
+        <Route path='multi-player' element={<App numPlayers={2} />} />
+      </Routes>
+    </BrowserRouter>
   </React.StrictMode>
 )

@@ -9,6 +9,7 @@ import initializePlayers from './utils/initializePlayers'
 import WinnerDisplay from './components/WinnerDisplay/WinnerDisplay'
 import TurnDisplay from './components/TurnDisplay/TurnDisplay'
 import getCurrentTurn from './utils/getCurrentTurn'
+import { Link } from 'react-router-dom'
 
 const initialTiles: string[] = Array(9).fill('')
 let players: player[]
@@ -106,9 +107,9 @@ function App({ numPlayers = 1 }: { numPlayers: number }) {
     <div className='App'>
       <Container>
         <Row xs={1} className='mb-5'>
-          <BootstrapButton variant='light' href='/'>
+          <Link to='/' className='btn btn-light'>
             Home
-          </BootstrapButton>
+          </Link>{' '}
         </Row>
         <Row className='mb-2'>
           {winner ? (
