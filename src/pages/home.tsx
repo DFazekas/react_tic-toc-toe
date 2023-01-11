@@ -33,7 +33,7 @@ export default function Home() {
   return (
     <Container>
       <Row>
-        <h1 style={{ fontSize: '50px' }}>Tic Toc Toe</h1>
+        <h1 style={{ fontSize: '50px' }}>Tic Tac Toe</h1>
       </Row>
 
       <Row className='mt-3'>

@@ -1,6 +1,6 @@
 {
-  "short_name": "Tic Toc Toe",
-  "name": "Simple Tic-Toc-Toe game",
+  "short_name": "Tic Tac Toe",
+  "name": "Simple Tic-Tac-Toe game",
   "icons": [
     {
       "src": "favicon.ico",
